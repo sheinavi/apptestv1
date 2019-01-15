@@ -26,6 +26,9 @@ class PersonController extends Controller
 
 
     public function search($fname = null,$lname = null){
+        if($fname == '0') $fname = '';
+        if($lname == '0') $lname = '';
+        
         $key = $fname.' '.$lname;
 
         $persons = Person::search($key)->paginate($this->per_page);
@@ -38,7 +41,9 @@ class PersonController extends Controller
     public function agefilter($maxAge){
         //select *, DATEDIFF(CURRENT_DATE, birthdate)/365 as age from `persons` where DATEDIFF(CURRENT_DATE, birthdate)/365 < 20 limit 1
 
-        $persons = Person::selectRaw('*, DATEDIFF(CURRENT_DATE, birthdate)/365 as age')->whereRaw('DATEDIFF(CURRENT_DATE, birthdate)/365 < ?', array($maxAge))->paginate($this->per_page);
+        $persons = Person::selectRaw('*, DATEDIFF(CURRENT_DATE, birthdate)/365 as age')->whereRaw('DATEDIFF(CURRENT_DATE, birthdate)/365 < ?', array($maxAge))
+        ->orderBy('id','desc')
+        ->paginate($this->per_page);
 
         return PersonResource::collection($persons);
 

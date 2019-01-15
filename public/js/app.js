@@ -36935,7 +36935,12 @@ var render = function() {
               }
             ],
             staticClass: "form-control mb-2 mr-sm-2",
-            attrs: { type: "text", id: "firstname", placeholder: "First Name" },
+            attrs: {
+              type: "text",
+              id: "firstname",
+              placeholder: "First Name",
+              required: ""
+            },
             domProps: { value: _vm.person.firstName },
             on: {
               input: function($event) {
@@ -36961,7 +36966,12 @@ var render = function() {
               }
             ],
             staticClass: "form-control mb-2 mr-sm-2",
-            attrs: { type: "text", id: "lastname", placeholder: "Last Name" },
+            attrs: {
+              type: "text",
+              id: "lastname",
+              placeholder: "Last Name",
+              required: ""
+            },
             domProps: { value: _vm.person.lastName },
             on: {
               input: function($event) {
@@ -36990,7 +37000,8 @@ var render = function() {
             attrs: {
               type: "text",
               id: "birthdate",
-              placeholder: "Birthdate (YYYY-mm-dd)"
+              placeholder: "Birthdate (YYYY-mm-dd)",
+              required: ""
             },
             domProps: { value: _vm.person.birthdate },
             on: {

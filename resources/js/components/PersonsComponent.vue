@@ -6,13 +6,13 @@
             <h3>Add or Edit</h3>
             <form @submit.prevent = "addPerson" class="form-inline mb-2">
                 <label class="sr-only" for="firstname">First Name</label>
-                <input type="text" class="form-control mb-2 mr-sm-2" id="firstname" placeholder="First Name" v-model="person.firstName">
+                <input type="text" class="form-control mb-2 mr-sm-2" id="firstname" placeholder="First Name" v-model="person.firstName" required>
 
                 <label class="sr-only" for="lastname">Last Name</label>
-                <input type="text" class="form-control mb-2 mr-sm-2" id="lastname" placeholder="Last Name" v-model="person.lastName">
+                <input type="text" class="form-control mb-2 mr-sm-2" id="lastname" placeholder="Last Name" v-model="person.lastName" required>
                 
                 <label class="sr-only" for="birthdate">Birthdate</label>
-                <input type="text" class="form-control mb-2 mr-sm-2" id="birthdate" placeholder="Birthdate (YYYY-mm-dd)" v-model="person.birthdate">
+                <input type="text" class="form-control mb-2 mr-sm-2" id="birthdate" placeholder="Birthdate (YYYY-mm-dd)" v-model="person.birthdate" required>
 
                 <button type="submit" class="btn btn-primary mb-2">Save</button>
             </form>
@@ -154,42 +154,44 @@
                 }
             },
             addPerson(){
-                if(this.edit === false){
-                    //add new person
-                        fetch(`api/person`,{
-                            method : 'post',
-                            body : JSON.stringify(this.person),
-                            headers :{
-                                'content-type' : 'application/json'
-                            }
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            this.person.firstName = '';
-                            this.person.lastName = '';
-                            this.person.birthdate = '';
-                            alert('New Person added');
-                            this.fetchPersons();
-                        })
-                        .catch(err => console.log(err));
-                }else{
-                            fetch(`api/person`,{
-                            method : 'put',
-                            body : JSON.stringify(this.person),
-                            headers :{
-                                'content-type' : 'application/json'
-                            }
-                            })
-                            .then(res => res.json())
-                            .then(data => {
-                                this.person.firstName = '';
-                                this.person.lastName = '';
-                                this.person.birthdate = '';
-                                alert('Record Updated');
-                                this.fetchPersons();
-                            })
-                            .catch(err => console.log(err));
-                }
+                       if(this.edit === false){
+                            //add new person
+                                fetch(`api/person`,{
+                                    method : 'post',
+                                    body : JSON.stringify(this.person),
+                                    headers :{
+                                        'content-type' : 'application/json'
+                                    }
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    this.person.firstName = '';
+                                    this.person.lastName = '';
+                                    this.person.birthdate = '';
+                                    alert('New Person added');
+                                    this.fetchPersons();
+                                })
+                                .catch(err => console.log(err));
+                        }else{
+                                    fetch(`api/person`,{
+                                    method : 'put',
+                                    body : JSON.stringify(this.person),
+                                    headers :{
+                                        'content-type' : 'application/json'
+                                    }
+                                    })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        this.person.firstName = '';
+                                        this.person.lastName = '';
+                                        this.person.birthdate = '';
+                                        alert('Record Updated');
+                                        this.fetchPersons();
+                                    })
+                                    .catch(err => console.log(err));
+                        }
+                
+                
             },
             editPerson(person){
                 this.edit = true;
@@ -214,7 +216,7 @@
 
                 if(fname == 0 && lname == 0){
                         //nothing is searched so show all again
-                        this.url = 'api/persons';
+                        this.reloadAll();
                 }else{
                         this.url = 'api/person/search/'+fname+'/'+lname;
                           
