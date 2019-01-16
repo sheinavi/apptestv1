@@ -110,12 +110,36 @@
             this.fetchPersons();
         },
 
+        mounted: function() {
+            
+            var vm = this;
+
+            $(function() {
+                $( "#birthdate" ).datepicker({
+                    
+                    dateFormat : 'yy-mm-dd',
+                    maxDate: 0,
+                    changeMonth: true,
+                    changeYear: true,
+                    onClose: function (dateText, inst) {
+                        var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                        var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                        $(this).datepicker('setDate', new Date(year, month, 1));  
+                    }
+                }).on('change', function(e) {
+                    var newdate = $( "#birthdate" ).val();
+                    vm.person.birthdate = newdate;
+                    //console.log(newdate);
+                });
+            });
+        },
+
         methods: {
             fetchPersons(){
                 fetch(this.url)
                 .then( res => res.json() )
                 .then(res => {
-                    console.log("Current Page is " + res.meta.current_page);
+                    
                     this.pagination = [];
                     //check if there is a need for pagination links
                     if(res.meta.to > 1){
@@ -185,8 +209,9 @@
                                         this.person.firstName = '';
                                         this.person.lastName = '';
                                         this.person.birthdate = '';
-                                        alert('Record Updated');
                                         this.fetchPersons();
+                                        alert('Record Updated');
+                                        
                                     })
                                     .catch(err => console.log(err));
                         }
@@ -200,6 +225,7 @@
                 this.person.lastName = person.lastName;
                 this.person.birthdate = person.birthdate;
                 this.person_id = person.id;
+                $( "#birthdate" ).val(this.person.birthdate);
             },
             filterByAge(){
                 this.search_firstname = '';

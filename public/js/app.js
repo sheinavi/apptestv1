@@ -1872,6 +1872,25 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.fetchPersons();
   },
+  mounted: function mounted() {
+    var vm = this;
+    $(function () {
+      $("#birthdate").datepicker({
+        dateFormat: 'yy-mm-dd',
+        maxDate: 0,
+        changeMonth: true,
+        changeYear: true,
+        onClose: function onClose(dateText, inst) {
+          var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+          var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+          $(this).datepicker('setDate', new Date(year, month, 1));
+        }
+      }).on('change', function (e) {
+        var newdate = $("#birthdate").val();
+        vm.person.birthdate = newdate; //console.log(newdate);
+      });
+    });
+  },
   methods: {
     fetchPersons: function fetchPersons() {
       var _this = this;
@@ -1879,7 +1898,6 @@ __webpack_require__.r(__webpack_exports__);
       fetch(this.url).then(function (res) {
         return res.json();
       }).then(function (res) {
-        console.log("Current Page is " + res.meta.current_page);
         _this.pagination = []; //check if there is a need for pagination links
 
         if (res.meta.to > 1) {
@@ -1958,9 +1976,10 @@ __webpack_require__.r(__webpack_exports__);
           _this3.person.firstName = '';
           _this3.person.lastName = '';
           _this3.person.birthdate = '';
-          alert('Record Updated');
 
           _this3.fetchPersons();
+
+          alert('Record Updated');
         }).catch(function (err) {
           return console.log(err);
         });
@@ -1973,6 +1992,7 @@ __webpack_require__.r(__webpack_exports__);
       this.person.lastName = person.lastName;
       this.person.birthdate = person.birthdate;
       this.person_id = person.id;
+      $("#birthdate").val(this.person.birthdate);
     },
     filterByAge: function filterByAge() {
       this.search_firstname = '';
@@ -1994,7 +2014,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (fname == 0 && lname == 0) {
         //nothing is searched so show all again
-        this.url = 'api/persons';
+        this.reloadAll();
       } else {
         this.url = 'api/person/search/' + fname + '/' + lname;
       }
